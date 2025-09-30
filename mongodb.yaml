@@ -1,20 +1,33 @@
-
+# ansible-roboshop/mongodb.yaml
 - name: configure mongodb service # task name
   hosts: mongodb # inventory group name
   become: yes # to get root privilages
   tasks: # list of tasks to be executed on the server
+
+  # here i am using copy module to copy the mongo repo file from ansible control node to ansible managed node
   - name: copy mongo repo file  # task name
     ansible.builtin.copy: # module name
       src: mongo.repo # source file which is in ansible control node
       dest: /etc/yum.repos.d/mongo.repo # destination file which is in ansible managed node
-
+# here i am using dnf module to install mongodb server
   - name: install mongodb server # task name
     ansible.builtin.dnf: # module name
       name: mongodb-org # package name
       state: present # present means if it is not installed it will install if it is installed it will do nothing
-
+# here i am using service module to start and enable mongodb service
   - name: start and enable mongodb service # task name
     ansible.builtin.service: # module name we can also use systemd module too (ansible.builtin.systemd)
       name: mongod # service name
       state: started # started means if it is not started it will start if it is started it will do nothing
       enabled: yes # enabled means if it is not enabled it will enable if it is enabled it will do nothing
+# here i am using replace module to change the bindIp from
+  - name: allow remote connections 
+    ansible.builtin.replace:
+    path: /etc/mongod.conf
+    regexp:  '127.0.0.1'
+    replace: '0.0.0.0'
+# here i am using service module to restart mongodb service
+  - name: restart mongodb service
+    ansible.builtin.service:
+      name: mongod
+      state: restarted
