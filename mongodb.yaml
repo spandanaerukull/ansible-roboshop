@@ -1,4 +1,4 @@
-# ansible-roboshop/mongodb.yaml
+# ansible-roboshop/mongodb.yaml #
 - name: configure mongodb service # task name
   hosts: mongodb # inventory group name
   become: yes # to get root privilages
@@ -25,7 +25,7 @@
     ansible.builtin.replace:
       path: /etc/mongod.conf
       regexp:  '127.0.0.1'
-      replace:  '0.0.0.0'
+      replace:  '0.0.0.0' # we can also use lineinfile module too (ansible.builtin.lineinfile) for more control
 # here i am using service module to restart mongodb service
   - name: restart mongodb service
     ansible.builtin.service:
