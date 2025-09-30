@@ -13,8 +13,8 @@
       name: mongodb-org # package name
       state: present # present means if it is not installed it will install if it is installed it will do nothing
 
-  - name: start mongodb service # task name
-    ansible.builtin.systemd: # module name
+  - name: start and enable mongodb service # task name
+    ansible.builtin.service: # module name we can also use systemd module too (ansible.builtin.systemd)
       name: mongod # service name
-      state: started
-      enabled: true
+      state: started # started means if it is not started it will start if it is started it will do nothing
+      enabled: yes # enabled means if it is not enabled it will enable if it is enabled it will do nothing
