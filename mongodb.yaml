@@ -1,0 +1,20 @@
+
+- name: configure mongodb service # task name
+  hosts: mongodb # inventory group name
+  become: yes # to get root privilages
+  tasks: # list of tasks to be executed on the server
+  - name: copy mongo repo file  # task name
+    ansible.builtin.copy: # module name
+      src: mongo.repo # source file which is in ansible control node
+      dest: /etc/yum.repos.d/mongo.repo # destination file which is in ansible managed node
+
+  - name: install mongodb server # task name
+    ansible.builtin.dnf: # module name
+      name: mongodb-org # package name
+      state: present # present means if it is not installed it will install if it is installed it will do nothing
+
+  - name: start mongodb service # task name
+    ansible.builtin.systemd: # module name
+      name: mongod # service name
+      state: started
+      enabled: true
