@@ -1,1 +1,11 @@
+[mongodb-org-7.0]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/9/mongodb-org/7.0/x86_64/
+enabled=1
+gpgcheck=0
 
+
+# this is mongo.repo file which is used to install mongodb in redhat 9 based os
+# this file should be placed in /etc/yum.repos.d/ directory
+# this file is used in ansible-roboshop playbook to install mongodb in redhat 9 based os
+# this file is used in ansible-roboshop playbook in mongodb.yaml file
