@@ -23,9 +23,9 @@
 # here i am using replace module to change the bindIp from
   - name: allow remote connections 
     ansible.builtin.replace:
-    path: /etc/mongod.conf
-    regexp:  '127.0.0.1'
-    replace: '0.0.0.0'
+      path: /etc/mongod.conf
+      regexp:  '127.0.0.1'
+      replace: '0.0.0.0'
 # here i am using service module to restart mongodb service
   - name: restart mongodb service
     ansible.builtin.service:
