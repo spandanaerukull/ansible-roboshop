@@ -30,4 +30,4 @@
   - name: restart mongodb service
     ansible.builtin.service:
       name: mongod
-      state: restarted
+      state: restarted # restarted means if it is not started it will start if it is started it will restart
