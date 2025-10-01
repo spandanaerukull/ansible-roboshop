@@ -1,38 +1,39 @@
 # configure catalogue component
 - name: configure catalogue component
-  hosts: catalogue
-  become: yes
+  hosts: catalogue # inventory group name
+  become: yes # to get root privilages
   tasks:
+  # Disable default Node.js module
   - name: disable default nodejs  # here i usede command line because we don't have any module for dnf module disable
-    ansible.builtin.command: dnf module disable nodejs -y 
-# 
+    ansible.builtin.command: dnf module disable nodejs -y  
+# Enable Node.js 20 module
   - name:  enable nodejs:20
     ansible.builtin.command: dnf module enable nodejs:20 -y
-
+# here i am using dnf module to install nodejs package
   - name: install nodejs
     ansible.builtin.dnf:
       name: nodejs
       state: present
-
+# here i am using user module to create roboshop user
   - name: create roboshop system user 
     ansible.builtin.user: # user module is used to create a user in ansible
       name: roboshop
       shell: /sbin/nologin  
       system: true # by giveing true roboshop will become the system user
       home: /app  
-  
+  # Create application directory
   - name: create application directory
     ansible.builtin.file:
       path: /app
       state: directory
-
+#Download catalogue code
   - name: download catalogue code... 
     ansible.builtin.get_url:
       url: "https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip"
       dest: /tmp/catalogue.zip
-
+# Extract catalogue code
   - name: extract catalogue code...
-    ansible.builtin.unarchive:
+  Extract catalogue code  ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
       dest: /app
       
