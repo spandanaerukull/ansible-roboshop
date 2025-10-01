@@ -1,0 +1,34 @@
+
+- name: installing the redis component
+  hosts: redis
+  become: yes
+  tasks:
+  - name: disable the default redis module
+    ansible.builtin.command: dnf module disable redis -y
+    
+
+  - name: enable redis:7
+    ansible.builtin.command: dnf module enable redis:7 -y
+
+  - name: install redis
+    ansible.builtin.dnf:
+      name: redis
+      state: present
+  
+  - name: allow the remote connections # by default redis will allow only local connections so we need to change the bind address 
+    ansible.builtin.replace: # we can also use lineinfile module too (ansible.builtin.lineinfile) for more control , here i used replace module to replace the bind address
+      path: /etc/hosts # file which we need to change
+      regexp: '127.0.01' # regular expression to search the line which contains old.host.name
+      replace: '0.0.0.0' # replace the old.host.name with new.host.name
+
+  - name: disable the protected mode # by default redis will run in protected mode so we need to disable it
+    ansible.builtin.inline:
+      path: /etc/redis/redis.conf
+      regexp: 'protected-mode' 
+      replace: 'protected-mode no' 
+
+  - name: start and enable redis service
+    ansible.builtin.service:
+      name: redis
+      state: started
+      enabled: yes
