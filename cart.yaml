@@ -1,0 +1,63 @@
+
+# ansible-roboshop/cart.yaml
+- name: configure cartcomponent
+  hosts: cart# inventory group name
+  become: yes # to get root privilages
+  tasks:
+  # Disable default Node.js module
+  - name: disable default nodejs  # here i usede command line because we don't have any module for dnf module disable
+    ansible.builtin.command: dnf module disable nodejs -y  
+# Enable Node.js 20 module
+  - name:  enable nodejs:20
+    ansible.builtin.command: dnf module enable nodejs:20 -y
+# here i am using dnf module to install nodejs package
+  - name: install nodejs
+    ansible.builtin.dnf:
+      name: nodejs
+      state: present
+# here i am using cart module to create roboshop cart (ansisble it self it checks the cart no need towrite the logic)
+  - name: create roboshop system user  
+    ansible.builtin.user: # user module is used to create a user in ansible
+      name: roboshop
+      shell: /sbin/nologin  
+      system: true # by giveing true roboshop will become the system user
+      home: /app  
+  # Create application directory
+  - name: create application directory
+    ansible.builtin.file:
+      path: /app
+      state: directory
+#Download cartcode
+  - name: download cartcode... 
+    ansible.builtin.get_url:
+      url: "https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip"
+      dest: /tmp/catalogue.zip
+# Extract cartcode
+#  this module thinks file exist on ansible control server, needs to extract on to remote machine
+#  remote_src: yes  --> this is used when the file is already present on the remote machine, already exist in cartserver
+  - name: extract cartcode...
+    ansible.builtin.unarchive:
+      src: /tmp/cart.zip
+      dest: /app
+      remote_src: yes # this is used when the file is already present on the remote machine, already exist in cartserver
+
+  - name: install dependencies
+    community.general.npm: # npm module is not present in ansible by default we need to install it using "ansible-galaxy collection install community.general"
+       path: /app # path where package.json is present
+
+  - name: copy cartservice to system directory # here i am using copy module to copy the catalogue.service file from ansible control node to ansible managed node
+    ansible.builtin.copy:
+      src: cart.service # here i am copying the catalogue.service file from ansible control node
+      dest: /etc/systemd/system/cart.service # here i am copying the catalogue.service file from ansible control node to ansible managed node
+
+  - name: systemctl daemon-reload # here i am using command module to run the command systemctl daemon-reload
+    ansible.builtin.systemd_service:
+       daemon_reload: true
+
+  - name: start and enable cartservice # here i am using service module to start and enable the cartservice
+    ansible.builtin.service:
+      name: cart
+      state: started
+      enabled: yes
+
+  
