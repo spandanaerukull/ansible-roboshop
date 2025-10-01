@@ -32,5 +32,5 @@ rc: 0 → Command ran successfully (exit code 0).
 rc: 1 or any non-zero → Command failed.
 
 # replace & inline
-  replace = replace only the word
+  replace = replace only the word or number
   inline = inline means it will replace whole line and weget more controle 

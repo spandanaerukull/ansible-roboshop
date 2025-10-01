@@ -21,11 +21,11 @@
       regexp: '127.0.01' # regular expression to search the line which contains old.host.name
       replace: '0.0.0.0' # replace the old.host.name with new.host.name
 
-  - name: disable the protected mode # by default redis will run in protected mode so we need to disable it
+  - name: disable protected mode # by default redis will run in protected mode so we need to disable it
     ansible.builtin.lineinfile:
       path: /etc/redis/redis.conf
       regexp: 'protected-mode' 
-      replace: protected-mode no 
+      line: protected-mode no 
 
   - name: start and enable redis service
     ansible.builtin.service:
