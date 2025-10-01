@@ -1,7 +1,7 @@
 
 # ansible-roboshop/cart.yaml
-- name: configure cartcomponent
-  hosts: cart# inventory group name
+- name: configure cart component
+  hosts: cart
   become: yes # to get root privilages
   tasks:
   # Disable default Node.js module
