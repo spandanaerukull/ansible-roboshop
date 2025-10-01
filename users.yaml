@@ -29,14 +29,14 @@
       path: /app
       state: directory
 #Download usercode
-  - name: download usercode... 
+  - name: download user code... 
     ansible.builtin.get_url:
       url: "https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip"
       dest: /tmp/catalogue.zip
 # Extract usercode
 #  this module thinks file exist on ansible control server, needs to extract on to remote machine
 #  remote_src: yes  --> this is used when the file is already present on the remote machine, already exist in userserver
-  - name: extract usercode...
+  - name: extract user code...
     ansible.builtin.unarchive:
       src: /tmp/user.zip
       dest: /app
