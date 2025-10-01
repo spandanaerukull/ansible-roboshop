@@ -1,4 +1,5 @@
-# configure catalogue component
+   # configure catalogue component
+
 - name: configure catalogue component
   hosts: catalogue # inventory group name
   become: yes # to get root privilages
