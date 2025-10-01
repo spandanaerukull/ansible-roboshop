@@ -71,7 +71,7 @@
       state: present
 
   - name: check products loaded or not
-    ansible.builtin.command: mongosh --host mongodb.daws84s.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")' # to check the catalogue database is present or not
+    ansible.builtin.command: mongosh --host  54.226.109.186 --eval 'db.getMongo().getDBNames().indexOf("catalogue")' # to check the catalogue database is present or not
     register: catalogue_output # command is used for to see the output of the command
 
   - name: print catalogue output
@@ -79,5 +79,5 @@
       msg: "{{ catalogue_output }}"
 
   - name: load products
-    ansible.builtin.shell: mongosh --host mongodb.daws84s.site < /app/db/master-data.js # here i used shell module because it supports redirection operators like <, >, >>, | etc
+    ansible.builtin.shell: mongosh --host 54.226.109.186 < /app/db/master-data.js # here i used shell module because it supports redirection operators like <, >, >>, | etc
     when: catalogue_output.stdout | int < 0 # when the output is less than 0 then only load the products data
