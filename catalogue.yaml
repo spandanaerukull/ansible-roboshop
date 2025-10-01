@@ -16,12 +16,12 @@
       name: nodejs
       state: present
 # here i am using user module to create roboshop user
-  - name: create roboshop system user 
-    ansible.builtin.user: # user module is used to create a user in ansible
-      name: roboshop
-      shell: /sbin/nologin  
-      system: true # by giveing true roboshop will become the system user
-      home: /app  
+  # - name: create roboshop system user 
+  #   ansible.builtin.user: # user module is used to create a user in ansible
+  #     name: roboshop
+  #     shell: /sbin/nologin  
+  #     system: true # by giveing true roboshop will become the system user
+  #     home: /app  
   # Create application directory
   - name: create application directory
     ansible.builtin.file:
@@ -33,8 +33,11 @@
       url: "https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip"
       dest: /tmp/catalogue.zip
 # Extract catalogue code
+#  this module thinks file exist on ansible control server, needs to extract on to remote machine
+#  remote_src: yes  --> this is used when the file is already present on the remote machine, already exist in catalogue server
   - name: extract catalogue code...
     ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
       dest: /app
+      remote_src: yes # this is used when the file is already present on the remote machine, already exist in catalogue server
       
