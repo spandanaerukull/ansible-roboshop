@@ -15,8 +15,8 @@
     ansible.builtin.dnf:
       name: nodejs
       state: present
-# here i am using user module to create roboshop user
-  # - name: create roboshop system user 
+# here i am using user module to create roboshop user (ansisble it self it checks the user no need towrite the logic)
+  # - name: create roboshop system user  
   #   ansible.builtin.user: # user module is used to create a user in ansible
   #     name: roboshop
   #     shell: /sbin/nologin  
@@ -40,4 +40,22 @@
       src: /tmp/catalogue.zip
       dest: /app
       remote_src: yes # this is used when the file is already present on the remote machine, already exist in catalogue server
-      
+
+  - name: install dependencies
+    community.general.npm: # npm module is not present in ansible by default we need to install it using "ansible-galaxy collection install community.general"
+       path: /app # path where package.json is present
+
+  - name: copy catalogue service to system directory # here i am using copy module to copy the catalogue.service file from ansible control node to ansible managed node
+    ansible.builtin.copy:
+      src: catalogue.service # here i am copying the catalogue.service file from ansible control node
+      dest: /etc/systemd/system/catalogue.service # here i am copying the catalogue.service file from ansible control node to ansible managed node
+
+  - name: systemctl daemon-reload # here i am using command module to run the command systemctl daemon-reload
+    ansible.builtin.systemd_service:
+       daemon_reload: true
+
+  - name: start and enable catalogue service # here i am using service module to start and enable the catalogue service
+    ansible.builtin.service:
+      name: catalogue
+      state: started
+      enabled: yes
