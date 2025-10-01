@@ -2,7 +2,7 @@
 
 
 - name: configure usercomponent
-  hosts: user# inventory group name
+  hosts: user
   become: yes # to get root privilages
   tasks:
   # Disable default Node.js module
