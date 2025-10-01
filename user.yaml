@@ -46,12 +46,11 @@
     community.general.npm: # npm module is not present in ansible by default we need to install it using "ansible-galaxy collection install community.general"
        path: /app # path where package.json is present
 
-  - name: copy users service to system directory # here i am using copy module to copy the catalogue.service file from ansible control node to ansible managed node
+  - name: copy user service to system directory # here i am using copy module to copy the catalogue.service file from ansible control node to ansible managed node
     ansible.builtin.copy:
       src: user.service # here i am copying the catalogue.service file from ansible control node
       dest: /etc/systemd/system/user.service
-      remote_src: yes # here i am copying the catalogue.service file from ansible control node to ansible managed node
-
+       
   - name: systemctl daemon-reload # here i am using command module to run the command systemctl daemon-reload
     ansible.builtin.systemd_service:
        daemon_reload: true
