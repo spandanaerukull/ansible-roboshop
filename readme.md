@@ -34,3 +34,8 @@ rc: 1 or any non-zero → Command failed.
 # replace & inline
   replace = replace only the word or number
   inline = inline means it will replace whole line and weget more controle 
+
+  # why we are using the command for disable and enabling the 
+  You are using the ansible.builtin.command module for disabling and enabling the nginx module because Ansible does not have a built-in module to directly manage DNF/YUM module streams (like dnf module enable/disable). The dnf module only installs or removes packages, not module streams.
+
+So, you use the command module to run the shell commands:
