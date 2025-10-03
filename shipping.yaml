@@ -77,7 +77,7 @@
 
   
   - name: import data # here i am using mysql_db module to import the schema.sql file to mysql database
-    tags: 
+    tags: # by giving tags command is used to run only edited  task or playbook
     - import
     community.mysql.mysql_db: # here i am using mysql_db module to import the schema.sql file to mysql database
       name: all # am saying all means all sql files should be imported 
@@ -92,7 +92,7 @@
     - /app/db/master-data.sql
 
   - name: restart shipping
-    tags:
+    tags: 
     - import
     ansible.builtin.service:
       state: restarted
