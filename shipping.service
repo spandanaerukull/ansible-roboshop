@@ -1,0 +1,15 @@
+
+[Unit]
+Description=Shipping Service
+
+[Service]
+User=roboshop
+// highlight-start
+Environment=CART_ENDPOINT=54.172.73.24
+Environment=DB_HOST= #need to replace with my ipaddress
+// highlight-end
+ExecStart=/bin/java -jar /app/shipping.jar
+SyslogIdentifier=shipping
+
+[Install]
+WantedBy=multi-user.target
