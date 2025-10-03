@@ -1,0 +1,10 @@
+
+#  Configure RabbitMQ Component
+- name: configure rabbitmq component
+  hosts: rabbitmq
+  become: yes
+  tasks:
+  - name: install erlang
+    ansible.builtin.dnf:
+      name: erlang
+      state: present

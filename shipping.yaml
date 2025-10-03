@@ -42,15 +42,15 @@
       dest: /app
       remote_src: yes
 
-  - name: install maven dependencies
-    ansible.builtin.command: mvn clean package
-    args:
-      chdir: /app
+  - name: install maven dependencies # here i am using command module to run the maven command to install the dependencies
+    ansible.builtin.command: mvn clean package # this will download all the dependencies and create the jar file
+    args: # to run the command in /app directory
+      chdir: /app # chdir is used to change the directory
 
-  - name: rename jar file
-    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
-    args:
-      chdir: /app
+  - name: rename jar file # here i am using command module to rename the jar file to shipping.jar
+    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar # here i am renaming the jar file to shipping.jar
+    args: # to run the command in /app directory
+      chdir: /app # chdir is used to change the directory
 
   - name: copy shipping service
     ansible.builtin.copy:
@@ -67,24 +67,26 @@
       state: started
       enabled: yes
 
-  # - name: connect to mysql using app user
+  # - name: connect to mysql using app user  #here directly i tried to connect because i taught data is loded but after running the code it shows it is not connected so i started the importing the data 
   #   community.mysql.mysql_info:
   #     login_user: shipping
   #     login_password: RoboShop@1
   #     login_host: mysql.daws84s.site
-  #     login_db: cities
+  #     login_db: cities  
+  # it is not giving us any written code  so no use with this code 
 
-  - name: import data
-    tags:
+  
+  - name: import data # here i am using mysql_db module to import the schema.sql file to mysql database
+    tags: 
     - import
-    community.mysql.mysql_db:
-      name: all
+    community.mysql.mysql_db: # here i am using mysql_db module to import the schema.sql file to mysql database
+      name: all # am saying all means all sql files should be imported 
       login_user: root
       login_password: RoboShop@1
       login_host: mysql.daws84s.site
       state: import
       target: "{{ item }}"
-    loop:
+    loop: 
     - /app/db/schema.sql
     - /app/db/app-user.sql
     - /app/db/master-data.sql
