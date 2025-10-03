@@ -1,23 +1,23 @@
-
+# Configure Shipping Component
 - name: configure shipping component
   hosts: shipping
   become: yes
   tasks:
-  - name: install maven and mysql
+  - name: install maven and mysql # shipping component is a java based application so we need to install maven and mysql client
     ansible.builtin.dnf:
-      name: "{{ item }}"
+      name: "{{ item }}" # here i used loop to install multiple packages
       state: installed
-    loop:
+    loop: # list of packages to be installed
     - maven
     - mysql
     
-  - name: install PyMySQL and cryptography 
+  - name: install PyMySQL and cryptography  # shipping component is a python based application so we need to install python3.9 and pip3.9
     ansible.builtin.pip:
-      name: "{{ item }}"
-      executable: pip3.9
+      name: "{{ item }}" # here i used loop to install multiple python packages
+      executable: pip3.9  # here we are using pip3.9 because it is python dependiency 
     loop:
-    - cryptography
-    - PyMySQL
+    - cryptography # cryptography is a python package to encrypt the data
+    - PyMySQL # PyMySQL is a python package to connect to mysql database
 
   - name: create app directory
     ansible.builtin.file:
